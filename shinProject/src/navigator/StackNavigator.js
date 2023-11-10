@@ -5,6 +5,8 @@ import { Image, TouchableOpacity, View, Text, PixelRatio, StyleSheet } from 'rea
 import {widthPercentageToDP as wp, heightPercentageToDP as hp,} from "react-native-responsive-screen";
 import { useNavigation } from '@react-navigation/native';
 import DrawerContent from '../forms/DrawerContent';
+import LoginScreen from '../screen/LoginScreen';
+import SignUpScreen from '../screen/SignUpScreen';
 
 
 const Stack = createStackNavigator();
@@ -13,7 +15,7 @@ const StackNavigator = () =>{
 
     const navigation = useNavigation(); 
 
-    const log = {
+    const logo = {
       uri :  require('../../assets/logoImage.jpg')
     }
 
@@ -33,7 +35,7 @@ const StackNavigator = () =>{
                 },
                 headerTitle : (props) => (
              
-                    <Image style={styles.logoStyle} resizeMode='contain' source={{uri:log.logoImage}}/>
+                    <Image style={styles.logoStyle} resizeMode='contain' source={logo.uri}/>
                   
                     
                 ),
@@ -43,6 +45,11 @@ const StackNavigator = () =>{
 
             {/* component={} 안에 페이지로 만들 컴포넌트를 넣음. 컴포넌트에 페이지 기능을 부여하는 코드*/}
             <Stack.Screen name="메인페이지" component={MainScreen} options={{headerShown:false}} />
+            <Stack.Screen name="로그인" component={LoginScreen} options={{headerShown:false}} />
+            <Stack.Screen name="회원가입" component={SignUpScreen} options={{headerShown:false}} />
+
+            
+
             
 
         </Stack.Navigator>
