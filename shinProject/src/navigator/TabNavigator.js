@@ -7,6 +7,7 @@ import {View} from 'react-native';
 import MainScreen from '../main/MainScreen';
 import LoginScreen from '../screen/LoginScreen';
 import { useSelector } from 'react-redux';
+import WriteScreen from '../screen/WriteScreen';
 
 
 const Tab = createBottomTabNavigator();
@@ -46,7 +47,7 @@ function TabNavigator() {
 
 <Tab.Screen
                 name="추가하기"
-                component={MainScreen}
+                component={WriteScreen}
                 options={{
                     tabBarIcon: () => (
                         <View
