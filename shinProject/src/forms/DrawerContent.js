@@ -5,12 +5,18 @@ import { Drawer, Avatar, Title, Caption, Image } from 'react-native-paper'
 import { DrawerContentScrollView, } from '@react-navigation/drawer';
 import { SimpleLineIcons, MaterialIcons  } from '@expo/vector-icons';
 import { useNavigation, params } from '@react-navigation/core';
+import { useSelector } from 'react-redux';
+import { auth } from '../../firebaseConfig';
 
 const DrawerContent = ({props}) => {
 
 const navigation = useNavigation();
 
-const [loggedIn, setLoggedIn] = useState(false);
+const displayName = useSelector((state)=>state.auth.userName);
+const loginState = useSelector((state)=>state.auth.loginState);
+const signOut = () => {
+    auth.signOut();
+}
 
 
 
@@ -18,52 +24,38 @@ const [loggedIn, setLoggedIn] = useState(false);
     <View style={styles.container}>
        
         <DrawerContentScrollView contentContainerStyle={styles.drawerContainer} {...props}>
+            
             <View style={styles.profileContainer}>
-                <Avatar.Image
-                    
-                    size={wp('15')}
-                />
-                <View style={{paddingLeft:10,}}>
-                <Text style={{fontSize:wp('4%'), fontWeight:'500'}}> 님</Text>
-                <Text>반갑습니다.</Text>
-                </View> 
+                {
+                    loginState ? (
+                    <View style={{paddingLeft:10,}}>
+                        <Text style={{fontSize:wp('4%'), fontWeight:'500'}}>{displayName} 님</Text>
+                        <Text style={{fontSize:wp('4%')}}>반갑습니다.</Text>
+                        </View> 
+                        ) : (
+                            <View style={{paddingLeft:10,}}>
+                        <Text style={{fontSize:wp('4%'), fontWeight:'500'}}>로그인 해주세요</Text>
+                        </View>
+                        )
+
+                
+                }
             </View>
             <View style={styles.menuContainer}>
-                <Text style={styles.menuTitle}>맛 집</Text>
-                    <TouchableOpacity
+                <Text style={styles.menuTitle}>나의 업무</Text>
+                    <TouchableOpacity onPress={()=> navigation.navigate('치료사 정보')}
                         style={styles.menuButton}>
-                        <Text style={styles.menuText}>음식</Text>
+                        <Text style={styles.menuText}>치료사 정보</Text>
                         <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.menuButton}>
-                        <Text style={styles.menuText}>술집</Text>
+                        <Text style={styles.menuText}>카톡 보내기</Text>
                         <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.menuButton}>
-                        <Text style={styles.menuText}>까페&디저트</Text>
-                        <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
-                    </TouchableOpacity>
             </View>
 
-            <View style={styles.menuContainer}>
-                <Text style={styles.menuTitle}>멋 집</Text>
-                    <TouchableOpacity style={styles.menuButton}>
-                        <Text style={styles.menuText}>캠핑</Text>
-                        <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.menuButton}>
-                        <Text style={styles.menuText}>관광</Text>
-                        <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.menuButton}>
-                        <Text style={styles.menuText}>까페&디저트</Text>
-                        <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
-                    </TouchableOpacity>
-            </View>
 
             <View style={styles.myContainer}>
                 <Text style={styles.menuTitle}>내정보</Text>
@@ -77,7 +69,23 @@ const [loggedIn, setLoggedIn] = useState(false);
         </DrawerContentScrollView>
         
         <View style={{borderTopWidth:1, width:wp('60%'), height:hp('6%'),}}>
-           
+        { 
+           loginState ? (
+
+            <TouchableOpacity onPress={()=>{signOut()
+            alert('로그아웃 되었습니다.')
+        navigation.navigate('로그인')}}
+                style={styles.loginButton}>
+                <Text style={styles.loginText}>로그아웃</Text>
+                <MaterialIcons name="login" size={wp('5%')} color="black" />          
+            </TouchableOpacity>
+           ):(
+
+           <TouchableOpacity onPress={()=>{navigation.navigate('로그인')}}
+                style={styles.loginButton}>
+                <Text style={styles.loginText}>로그인하기</Text>
+                <MaterialIcons name="login" size={wp('5%')} color="black" />          
+            </TouchableOpacity>)}
         </View>
     </View>
   )
@@ -148,7 +156,7 @@ const styles = StyleSheet.create({
     },
 
     menuText : {
-        fontSize : wp('3%'),
+        fontSize : wp('4%'),
         paddingLeft : 10,
     },
 

@@ -9,6 +9,9 @@ import LoginScreen from '../screen/LoginScreen';
 import SignUpScreen from '../screen/SignUpScreen';
 import WriteScreen from '../screen/WriteScreen';
 import ClothSize from '../forms/ClothSize';
+import MyPage from '../screen/MyPage';
+import UpdateInfo from '../screen/UpdateInfo';
+import TherapistInfo from '../screen/TherapistInfo';
 
 
 const Stack = createStackNavigator();
@@ -52,6 +55,9 @@ const StackNavigator = () =>{
             <Stack.Screen name="회원가입" component={SignUpScreen} options={{headerShown:false}} />
             
             <Stack.Screen name="사이즈" component={ClothSize} options={{headerShown:false}} />
+            <Stack.Screen name="tab_마이페이지" component={MyPage} options={{headerShown:false}} />
+            <Stack.Screen name="개인정보수정" component={UpdateInfo} options={{headerShown:false}} />
+            <Stack.Screen name="치료사 정보" component={TherapistInfo} options={{headerShown:false}} />
 
             
 

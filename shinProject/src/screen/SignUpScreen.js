@@ -99,7 +99,7 @@ const SignUpScreen = () => {
 
     
     useEffect(()=>{
-        const pwRegex = new RegExp('^[a-zA-Z0-9\W_]{6,}$');
+        const pwRegex = new RegExp('^[a-z0-9]{6,}$');
         if(password.match(pwRegex)){
             setEditableComparePw(true)
             setIsDuplication('비번 가능')

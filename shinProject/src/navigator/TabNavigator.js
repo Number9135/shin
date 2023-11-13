@@ -8,6 +8,7 @@ import MainScreen from '../main/MainScreen';
 import LoginScreen from '../screen/LoginScreen';
 import { useSelector } from 'react-redux';
 import WriteScreen from '../screen/WriteScreen';
+import MyPage from '../screen/MyPage';
 
 
 const Tab = createBottomTabNavigator();
@@ -82,7 +83,7 @@ function TabNavigator() {
 
 {
           loginState ? (
-            <Tab.Screen name="마이페이지" component={MainScreen}
+            <Tab.Screen name="마이페이지" component={MyPage}
        options={{
         tabBarIcon : ({ focused, size }) => (
           <Ionicons name="person" size={wp('4.5%')} color={focused ? "black" : "gray"} />
