@@ -49,7 +49,8 @@ const signOut = () => {
                         <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.menuButton}>
+                    <TouchableOpacity onPress={()=>navigation.navigate('메세지')}
+                    style={styles.menuButton}>
                         <Text style={styles.menuText}>카톡 보내기</Text>
                         <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
                     </TouchableOpacity>

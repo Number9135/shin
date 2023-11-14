@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import React, {useEffect} from 'react';
 import { auth, firebase_db } from '../../firebaseConfig';
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,11 +45,16 @@ const MainScreen = () => {
         auth.signOut()
       }
 
+      const manClothSize = 
+      {
+      "manClothSize" : 'https://firebasestorage.googleapis.com/v0/b/shinproje.appspot.com/o/%EB%82%A8%EC%9E%90.jpg?alt=media&token=19042eac-0cc3-4660-8005-cdbec41d4f38'
+  }
+
   return (
     <View>
      
       <TouchableOpacity onPress={signOut}>
-        <Text>로그아웃</Text>
+        <Image source={{uri:manClothSize.manClothSize}}/>
       </TouchableOpacity>
     </View>
   )

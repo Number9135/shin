@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native';
 const SignUpScreen = () => {
     const navigation = useNavigation();
     const [isFocus, setIsFocus] = useState(null);
-    const [isDuplication, setIsDuplication] = useState(null);
+    const [isDuplication, setIsDuplication] = useState('');
     const [errMsg, setErrMsg] = useState(null);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -72,30 +72,34 @@ const SignUpScreen = () => {
     const NicknameDuplicationButton = async(n) => {
         const nicknameRegex = new RegExp('^[가-힣a-zA-Z0-9]+$')
         try{
-            await firebase_db.ref('users').orderByChild('profile/UserName')
-            .equalTo(n)
-            .once('value')
-            .then((snapshot)=>{
-                console.log(snapshot)
-                if(n.match(nicknameRegex)){
-                    if(snapshot.exists()){
-                        setIsDuplication('닉네임 중복')
-                        console.log('중복')
+            await firebase_db.ref('users')
+                .orderByChild('profile/UserName')
+                .equalTo(n)
+                .once('value')
+                .then((snapshot)=>{
+                    let data = snapshot.val()
+                    if(n.match(nicknameRegex)){
+                        if(data.exists()){
+                            setIsDuplication('닉네임 중복');
+                            console.log('중복');
+                            setEditableNick(false);
+                        }else{
+                            setIsDuplication('닉네임 미중복');
+                            console.log('미중복');
+                            setEditableNick(true);
+                        }
                     }else{
-                        setIsDuplication('닉네임 미중복')
-                        console.log('미중복')
-                        setEditablePw(true);
+                        setIsDuplication('잘못된 닉네임 형식');
+                        console.log('잘못된 형식');
                     }
-                }else{
-                    setIsDuplication('잘못된 닉네임 형식')
-                    console.log('잘못된 형식')
-                }
-            })
-        }catch{
-            setErrMsg('중복확인 오류')
-            console.log('오류')
+                })
+           
+        } catch(error) {
+            setErrMsg('중복확인 오류');
+            console.log('오류', error);
         }
-    }
+    };
+    
 
     
     useEffect(()=>{

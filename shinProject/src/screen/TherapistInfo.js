@@ -5,36 +5,77 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp,} from "react-nati
 import { TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 
 const TherapistInfo = () => {
-
+    const navigation = useNavigation();
     const [fetchData, setFetchData] = useState([]);
     const [isSearch, setIsSearch] = useState('');
+    const [ isSelect, setIsSelect ] = useState([]);
+    const [sortType, setSortType] = useState("default");
 
     useEffect(()=>{
             firebase_db.ref('userInfo').once('value')
             .then((snapshot)=>{
                 let data = snapshot.val()
-                setFetchData(data)
+                setFetchData(data);
+                setIsSelect(data);
+
             })
+    }, [])
+
+    useEffect(()=> {
+        setIsSelect(fetchData)
     }, [fetchData])
+
+    console.log(fetchData)
+
+
+    const searchName = (e) => {
+            const filteredData = Object.values(fetchData).filter(d => d.Name.includes(e));
+            setIsSelect(filteredData);
+
+    };
+
+    const alignNameWithSort = () => {
+        const sortName =  Object.values(fetchData).sort((a, b) => {
+            let x = a.Name.toLowerCase();
+            let y = b.Name.toLowerCase();
+                if (x < y) {
+                    return -1;
+                    }
+                if (x > y) {
+                    return 1;
+                    }
+                return 0;
+                })
+                setIsSelect(sortName)
+            }
+
+        const alignDateWithSort = () => {
+            const sortDate = Object.values(fetchData).sort((a, b) =>{
+                const dateA = new Date(a.JoinDate).getTime();
+                const dateB = new Date(b.JoinDate).getTime();
+                return dateA > dateB ? 1 : -1;
+            } )
+            setIsSelect(sortDate)
+        }
+    
+
+  
 
   return (
     <View style={styles.container}>
         <View style={styles.barContainer}>
             <View style={styles.menuContainer}>
-            <TouchableOpacity
+            <TouchableOpacity onPress={alignNameWithSort}
                 style={styles.buttonStyle}>
-                <Text style={styles.menuText}>전 체</Text>
+                <Text style={styles.menuText}>이 름</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity onPress={alignDateWithSort}
                 style={styles.buttonStyle}>
                 <Text style={styles.menuText}>입 사</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.buttonStyle}>
-                <Text style={styles.menuText}>직 종</Text>
             </TouchableOpacity>
             </View>
             <View style={styles.searchContainer}>
@@ -43,7 +84,7 @@ const TherapistInfo = () => {
                     value={isSearch}
                     onChangeText={setIsSearch}
                 />
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>searchName(isSearch)}>
                     <EvilIcons name="search" size={wp('8%')} color="black" />
                 </TouchableOpacity>
             </View>
@@ -51,17 +92,27 @@ const TherapistInfo = () => {
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
       {
-        Object.keys(fetchData).map((key)=>{
+        Object.values(isSelect).map((value)=>{
             return(
-                <TouchableOpacity key={key} style={styles.mapContainer}>
+                <TouchableOpacity onPress={()=>navigation.navigate('상세페이지', {
+                    name : value.Name,
+                    sex : value.Sex,
+                    joinDate : value.JoinDate,
+                    major : value.Major,
+                    floor : value.Floor,
+                    upperSize : value.UpperSize,
+                    lowerSize : value.LowerSize,
+                    cardigan : value.Cardigan,
+                })}
+                key={value.Name} style={styles.mapContainer}>
                     <View style={styles.nameContainer}>
-                    <Text style={styles.textFont}>{fetchData[key].Name}</Text>
+                    <Text style={styles.textFont}>{value.Name}</Text>
                     </View>
                     <View style={styles.joinDateContainer}>
-                    <Text style={styles.textFont}>{fetchData[key].JoinDate}</Text>
+                    <Text style={styles.textFont}>{value.JoinDate}</Text>
                     </View>
                     <View style={styles.majorContainer}>
-                    <Text style={styles.textFont}>{fetchData[key].Major}</Text>
+                    <Text style={styles.textFont}>{value.Major}</Text>
 
                     </View>
                 </TouchableOpacity>
@@ -132,7 +183,7 @@ const styles = StyleSheet.create({
 
     menuContainer : {
         height : hp('8%'),
-        width : wp('58'),
+        width : wp('55'),
         flexDirection : 'row',
         alignItems : 'center',
         justifyContent :'space-around',
@@ -141,7 +192,7 @@ const styles = StyleSheet.create({
 
     buttonStyle : {
         height : hp('7%'),
-        width : wp('18%'),
+        width : wp('25%'),
         justifyContent : 'center',
         alignItems : 'center',
         borderRadius : 5,
@@ -156,7 +207,7 @@ const styles = StyleSheet.create({
 
     inputStyle : {
         height : hp('7%'),
-        width : wp('30%'),
+        width : wp('35%'),
         justifyContent : 'center',
         alignItems : 'center',
         borderRadius : 5,
