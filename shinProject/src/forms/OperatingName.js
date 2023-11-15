@@ -1,29 +1,63 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import { Ionicons, AntDesign  } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react'
+import { Ionicons, AntDesign, Entypo   } from '@expo/vector-icons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp,} from "react-native-responsive-screen";
 import { TextInput } from 'react-native';
-
+import { auth, firebase_db } from '../../firebaseConfig';
 
 
 const OperatingName = (props) => {
-    const [ isEdit, setIsEdit ] = useState(false)
+    const [ isEdit, setIsEdit ] = useState(false);
+    const [ sex, setSex ] = useState(`${props.sex}`);
+    const [ name , setName] = useState(`${props.name}`);
+
+    const updateHandler = async() => {
+         if(name.length > 0){
+            await firebase_db.ref('userInfo/' + props.dataId)
+            .update({
+                Name : name,
+                Sex : sex,
+            }).then(()=>{
+                setIsEdit(false)
+                console.log('성공')
+            })
+         }else{
+            console.log('업데이트 에러')
+         }
+    }
+
+
+    const sexHandler = () => {
+       setSex((prevSex) => prevSex === '남' ? '여' : '남')
+    }
+
+   
+ 
+
+
   return (
    <View>
         {
             isEdit ? (
                 <View style={styles.infoCoverContainer}>
+                    <TouchableOpacity onPress={()=>setIsEdit(false)}
+                    style={styles.cancelButton}>
+                    <Entypo name="cross" size={wp('6%')} color="gray" />
+                    </TouchableOpacity>
                 <View style={styles.infoContainer}>
                 <TextInput
                     style={styles.inputStyle}
                     placeholder={`${props.name}`}
+                    value={name}
+                    onChangeText={setName}
+                    
                 />
-                <TouchableOpacity
+                <TouchableOpacity onPress={sexHandler}
                 style={styles.sexButton}>
-                    <Text>{props.sex}</Text>
+                    <Text>{sex}</Text>
                 </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={()=>setIsEdit('name')}
+                <TouchableOpacity onPress={updateHandler}
                  >
                 <AntDesign name="plus" size={wp('6%')} color="black" />
                 </TouchableOpacity>
@@ -31,7 +65,7 @@ const OperatingName = (props) => {
             ) : (
                 <View style={styles.infoCoverContainer}>
                 <View style={styles.infoContainer}>
-                <Text style={styles.textFont}>{props.name} ({props.sex})</Text>
+                <Text style={styles.textFont}>{name} ({sex})</Text>
                 </View>
                 <TouchableOpacity onPress={()=>setIsEdit(true)}
                  >
@@ -59,7 +93,6 @@ const styles = StyleSheet.create({
         flexDirection : 'row',
         alignItems : 'center',
         justifyContent : 'center',
-        marginVertical : 10,
         
     },
 
@@ -86,5 +119,10 @@ const styles = StyleSheet.create({
         alignItems : 'center',
         marginLeft : 10,
 
+    },
+
+    cancelButton : {
+        justifyContent : 'center',
+        alignItems : 'center'
     }
 })

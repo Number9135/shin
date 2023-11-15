@@ -6,9 +6,14 @@ import { TouchableOpacity } from 'react-native';
 import { TextInput } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import {
+    selectName, selectSex, selectMajor, selectFloor, selectUpperSize, selectLowerSize, selectCardigan, selectUserId
+} from '../redux/UserInfoSlice';
 
 
 const TherapistInfo = () => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const [fetchData, setFetchData] = useState([]);
     const [isSearch, setIsSearch] = useState('');
@@ -16,9 +21,9 @@ const TherapistInfo = () => {
     const [sortType, setSortType] = useState("default");
 
     useEffect(()=>{
-            firebase_db.ref('userInfo').once('value')
-            .then((snapshot)=>{
-                let data = snapshot.val()
+            firebase_db.ref('userInfo').on('value', (snapshot) => {
+                let data = snapshot.val();
+                let dataId = Object.keys(data)
                 setFetchData(data);
                 setIsSelect(data);
 
@@ -28,8 +33,6 @@ const TherapistInfo = () => {
     useEffect(()=> {
         setIsSelect(fetchData)
     }, [fetchData])
-
-    console.log(fetchData)
 
 
     const searchName = (e) => {
@@ -92,9 +95,11 @@ const TherapistInfo = () => {
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
       {
-        Object.values(isSelect).map((value)=>{
+        Object.keys(isSelect).map((dataId)=>{
+            const value = isSelect[dataId]
             return(
                 <TouchableOpacity onPress={()=>navigation.navigate('상세페이지', {
+                    dataId : dataId,
                     name : value.Name,
                     sex : value.Sex,
                     joinDate : value.JoinDate,
@@ -104,7 +109,8 @@ const TherapistInfo = () => {
                     lowerSize : value.LowerSize,
                     cardigan : value.Cardigan,
                 })}
-                key={value.Name} style={styles.mapContainer}>
+                key={dataId}
+                 style={styles.mapContainer}>
                     <View style={styles.nameContainer}>
                     <Text style={styles.textFont}>{value.Name}</Text>
                     </View>

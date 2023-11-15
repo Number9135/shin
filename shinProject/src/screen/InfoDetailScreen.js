@@ -1,61 +1,55 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Alert } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { useNavigation } from '@react-navigation/native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp,} from "react-native-responsive-screen";
 import { TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import OperatingName from '../forms/OperatingName';
+import OperatingDate from '../forms/OperatingDate';
+import { Ionicons } from '@expo/vector-icons';
+import OperatingMajor from '../forms/OperatingMajor';
+import OperatingSize from '../forms/OperatingSize';
+import { firebase_db } from '../../firebaseConfig';
+
 
 const InfoDetailScreen = ({route}) => {
     const navigation = useNavigation();
     const [ isEdit, setIsEdit ] = useState(null);
-    const {name, sex, joinDate, major, floor, upperSize, lowerSize, cardigan} = route.params
+    const {dataId, name, sex, joinDate, major, floor, upperSize, lowerSize, cardigan} = route.params
+
+    const [ isSex, setIsSex ] = useState(sex);
+
+    const deletAlert = () => {
+      Alert.alert('정말로 삭제하시겠습니까?', '삭제 후 데이터는 복구되지 않습니다.', [
+        {
+          text : "삭제",
+          onPress : () => { firebase_db.ref('userInfo/' + dataId).remove()
+          navigation.goBack()}
+        },
+        {
+          text : "취소",
+         
+        }
+      ])
+    }
+
+
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-        style={styles.buttonStyle}>
-            <Text style={styles.textFont}>삭제</Text>
-        </TouchableOpacity>
         <Text style={styles.headerText}>치료사 정보</Text>
-        <TouchableOpacity
-        style={styles.buttonStyle}>
-            <Text style={styles.textFont}>수정</Text>
-        </TouchableOpacity>
-      </View>
-      <OperatingName name={name} sex={sex}/>
 
-      <View style={styles.infoCoverContainer}>
-      <View style={styles.infoContainer}>
-        <Text style={styles.textFont}>{joinDate}</Text>
-      </View>
-      <TouchableOpacity >
-        <Ionicons name="pencil-outline" size={wp('5%')} color="black" />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.operatingContainer}>
+      <OperatingName dataId={dataId} name={name} sex={sex}/>
+
+      <OperatingDate dataId={dataId} joinDate={joinDate}/>
       
-      <View style={styles.infoCoverContainer}>
-      <View style={styles.infoContainer}>
-        <Text style={styles.textFont}>
-          {major} ({floor})
-        </Text>
-      </View>
-      <TouchableOpacity >
-        <Ionicons name="pencil-outline" size={wp('5%')} color="black" />
-        </TouchableOpacity>
+      <OperatingMajor dataId={dataId} major={major} floor={floor}/>
+
+      <OperatingSize dataId={dataId} upperSize={upperSize} lowerSize={lowerSize} cardigan={cardigan}/>
+  
       </View>
 
-      <View style={styles.infoCoverContainer}>
-      <View style={styles.infoContainer}>
-        <Text style={styles.textFont}>
-          상의 {upperSize} | 하의 {lowerSize} | 가디건 {cardigan}
-        </Text>
-      </View>
-      <TouchableOpacity >
-        <Ionicons name="pencil-outline" size={wp('5%')} color="black" />
-        </TouchableOpacity>
-      </View>
+      
 
       <View style={styles.sumbitContainer}>
         <TouchableOpacity
@@ -63,6 +57,13 @@ const InfoDetailScreen = ({route}) => {
           style={styles.goBackButtonStyle}
         >
           <Text style={styles.textFont}>돌아가기</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={deletAlert}
+          style={styles.deletButton}
+        >
+          <Text style={[styles.textFont, {color:'blue'}]}>데이터 삭제</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -79,47 +80,22 @@ const styles = StyleSheet.create({
 
     headerText : {
         fontSize : wp('6%'),
+        marginVertical : 20,
     },
 
-    headerContainer : {
-        height : hp('10%'),
-        width : wp('100%'),
-        flexDirection : 'row',
-        alignItems : 'center',
-        justifyContent : 'space-between'
-    },
-    
 
     textFont : {
         fontSize : wp('4.5%')
     },
 
-    infoContainer : {
-        borderBottomWidth : 2,
-        borderColor : 'darkgray',
-        height : hp('8%'),
-        width : wp('70%'),
-        flexDirection : 'row',
-        alignItems : 'center',
-        justifyContent : 'center',
-        marginVertical : 10,
-        
-    },
 
-    infoCoverContainer : {
-        width : wp('70%'), 
-        height : hp('13%'),
-        flexDirection:'row', 
-        alignItems: 'center', 
-        justifyContent:'space-around' 
-    },
 
     sumbitContainer : {
         height : hp('15%'),
         width : wp('85%'),
-        marginTop : 10,
+        marginTop : 5,
         justifyContent : 'center',
-        alignItems : 'center'
+        alignItems : 'center',
     },
 
     goBackButtonStyle : {
@@ -139,5 +115,16 @@ const styles = StyleSheet.create({
         width : wp('15%'),
         justifyContent : 'center',
         alignItems : 'center'
+    },
+
+    deletButton : {
+      marginTop : 10,
+    },
+
+    operatingContainer : {
+      justifyContent : 'center',
+      alignItems : 'center',
+      height : hp('50%'),
+      width : wp('85%')
     }
 })

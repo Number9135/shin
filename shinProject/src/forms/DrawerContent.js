@@ -7,6 +7,7 @@ import { SimpleLineIcons, MaterialIcons  } from '@expo/vector-icons';
 import { useNavigation, params } from '@react-navigation/core';
 import { useSelector } from 'react-redux';
 import { auth } from '../../firebaseConfig';
+import { Alert } from 'react-native';
 
 const DrawerContent = ({props}) => {
 
@@ -16,6 +17,27 @@ const displayName = useSelector((state)=>state.auth.userName);
 const loginState = useSelector((state)=>state.auth.loginState);
 const signOut = () => {
     auth.signOut();
+}
+
+const loginAlert = () => {
+    Alert.alert('로그인이 필요합니다.', '로그인페이지로 이동합니다.', [
+        {
+            text : "로그인페이지로 이동",
+            onPress : ()=>navigation.navigate('로그인')
+        },
+        {
+            text : "돌아가기",
+            style : 'cancel'
+        },
+    ])
+}
+
+const drawerHandlerWithLogin = () => {
+    if(loginState === true){
+        navigation.navigate('치료사 정보')
+    }else{
+        loginAlert()
+    }
 }
 
 
@@ -43,7 +65,7 @@ const signOut = () => {
             </View>
             <View style={styles.menuContainer}>
                 <Text style={styles.menuTitle}>나의 업무</Text>
-                    <TouchableOpacity onPress={()=> navigation.navigate('치료사 정보')}
+                    <TouchableOpacity onPress={drawerHandlerWithLogin}
                         style={styles.menuButton}>
                         <Text style={styles.menuText}>치료사 정보</Text>
                         <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
