@@ -65,9 +65,15 @@ const drawerHandlerWithLogin = () => {
             </View>
             <View style={styles.menuContainer}>
                 <Text style={styles.menuTitle}>나의 업무</Text>
-                    <TouchableOpacity onPress={drawerHandlerWithLogin}
+                    <TouchableOpacity onPress={()=>navigation.navigate('치료사 정보')}
                         style={styles.menuButton}>
                         <Text style={styles.menuText}>치료사 정보</Text>
+                        <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={()=>navigation.navigate('신청예정자')}
+                        style={styles.menuButton}>
+                        <Text style={styles.menuText}>신청예정자</Text>
                         <SimpleLineIcons name="arrow-right" size={wp('3%')} color="black" />
                     </TouchableOpacity>
 

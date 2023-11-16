@@ -16,6 +16,7 @@ const InfoDetailScreen = ({route}) => {
     const [ isEdit, setIsEdit ] = useState(null);
     const {dataId, name, sex, joinDate, major, floor, upperSize, lowerSize, cardigan} = route.params
 
+    console.log(dataId)
     const [ isSex, setIsSex ] = useState(sex);
 
     const deletAlert = () => {

@@ -7,9 +7,6 @@ import { TextInput } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import {
-    selectName, selectSex, selectMajor, selectFloor, selectUpperSize, selectLowerSize, selectCardigan, selectUserId
-} from '../redux/UserInfoSlice';
 
 
 const TherapistInfo = () => {
@@ -29,40 +26,52 @@ const TherapistInfo = () => {
 
             })
     }, [])
-
+ 
     useEffect(()=> {
         setIsSelect(fetchData)
     }, [fetchData])
 
 
-    const searchName = (e) => {
-            const filteredData = Object.values(fetchData).filter(d => d.Name.includes(e));
-            setIsSelect(filteredData);
 
-    };
+    const searchName = (e) => {
+        const filteredData = Object.entries(fetchData).filter(([key, value]) => value.Name.includes(e.toLowerCase()));
+      
+        const filteredDataObject = Object.fromEntries(filteredData);
+        setIsSelect(filteredDataObject);
+        console.log('filteredData: ', filteredDataObject);
+      };
+      
 
     const alignNameWithSort = () => {
-        const sortName =  Object.values(fetchData).sort((a, b) => {
-            let x = a.Name.toLowerCase();
-            let y = b.Name.toLowerCase();
-                if (x < y) {
-                    return -1;
-                    }
-                if (x > y) {
-                    return 1;
-                    }
-                return 0;
-                })
-                setIsSelect(sortName)
-            }
+        const sortName = Object.entries(fetchData).sort(([keyA, valueA], [keyB, valueB]) => {
+          let x = valueA.Name.toLowerCase();
+          let y = valueB.Name.toLowerCase();
+          if (x < y) {
+            return -1;
+          }
+          if (x > y) {
+            return 1;
+          }
+          return 0;
+        });
+      
+        const sortedData = Object.fromEntries(sortName);
+        setFetchData(sortedData);
+        setIsSelect(sortedData);
+      };
+      
 
         const alignDateWithSort = () => {
-            const sortDate = Object.values(fetchData).sort((a, b) =>{
-                const dateA = new Date(a.JoinDate).getTime();
-                const dateB = new Date(b.JoinDate).getTime();
+            const sortDate = Object.entries(fetchData).sort(([keyA, valueA], [keyB, valueB]) =>{
+                const dateA = new Date(valueA.JoinDate).getTime();
+                const dateB = new Date(valueB.JoinDate).getTime();
                 return dateA > dateB ? 1 : -1;
             } )
-            setIsSelect(sortDate)
+
+            const sortedData = Object.fromEntries(sortDate)
+            setFetchData(sortedData);
+            setIsSelect(sortedData);
+            
         }
     
 
@@ -95,8 +104,8 @@ const TherapistInfo = () => {
         </View>
         <ScrollView showsVerticalScrollIndicator={false}>
       {
-        Object.keys(isSelect).map((dataId)=>{
-            const value = isSelect[dataId]
+        Object.entries(isSelect).map(([dataId, value])=>{
+            //const value = isSelect[dataId]
             return(
                 <TouchableOpacity onPress={()=>navigation.navigate('상세페이지', {
                     dataId : dataId,

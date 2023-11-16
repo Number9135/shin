@@ -19,8 +19,11 @@ const OperatingDate = (props) => {
             if(isYear.length === 4 && isMonth.length > 0 && isDay.length >0){
                 firebase_db.ref('userInfo/' + props.dataId)
                 .update({
-                    JoinDate : `${isYear} - ${isMonth} - ${isDay}`
+                    JoinDate : `${isYear} - ${isMonth} - ${isDay}`,
+                    CheckDate : `${isYear} - ${isMonth} - ${isDay}`,
+                   
                 })
+                console.log(props.dataId)
                 setIsEdit(false)
                 setIsMsg(null)
                 setIsJoinDate(`${isYear} - ${isMonth} - ${isDay}`)
