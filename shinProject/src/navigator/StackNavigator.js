@@ -15,7 +15,8 @@ import TherapistInfo from '../screen/TherapistInfo';
 import SendingMsg from '../screen/SendingMsg';
 import InfoDetailScreen from '../screen/InfoDetailScreen';
 import RequestPredestinator from '../screen/RequestPredestinator';
-
+import OneYearUserDetail from '../screen/OneYearUserDetail';
+import SendingAlarm from '../main/SendingAlarm'
 
 const Stack = createStackNavigator();
 
@@ -64,6 +65,8 @@ const StackNavigator = () =>{
             <Stack.Screen name="메세지" component={SendingMsg} options={{headerShown:false}} />
             <Stack.Screen name="상세페이지" component={InfoDetailScreen} options={{headerShown:false}} />
             <Stack.Screen name="신청예정자" component={RequestPredestinator} options={{headerShown:false}} />
+            <Stack.Screen name="예정자상세페이지" component={OneYearUserDetail} options={{headerShown:false}} />
+            <Stack.Screen name="테스트" component={SendingAlarm} options={{headerShown:false}} />
 
             
 

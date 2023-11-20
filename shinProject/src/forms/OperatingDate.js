@@ -22,11 +22,13 @@ const OperatingDate = (props) => {
                     JoinDate : `${isYear} - ${isMonth} - ${isDay}`,
                     CheckDate : `${isYear} - ${isMonth} - ${isDay}`,
                    
-                })
-                console.log(props.dataId)
+                }).then(()=>{
+                  console.log(props.dataId)
                 setIsEdit(false)
                 setIsMsg(null)
                 setIsJoinDate(`${isYear} - ${isMonth} - ${isDay}`)
+                })
+                
             }else{
                 setIsMsg('양식 불일치')
             }

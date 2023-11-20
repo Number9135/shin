@@ -15,15 +15,13 @@ const InfoDetailScreen = ({route}) => {
     const navigation = useNavigation();
     const [ isEdit, setIsEdit ] = useState(null);
     const {dataId, name, sex, joinDate, major, floor, upperSize, lowerSize, cardigan} = route.params
-
-    console.log(dataId)
     const [ isSex, setIsSex ] = useState(sex);
 
     const deletAlert = () => {
       Alert.alert('정말로 삭제하시겠습니까?', '삭제 후 데이터는 복구되지 않습니다.', [
         {
           text : "삭제",
-          onPress : () => { firebase_db.ref('userInfo/' + dataId).remove()
+          onPress : () => { removeHandler()
           navigation.goBack()}
         },
         {
@@ -31,6 +29,14 @@ const InfoDetailScreen = ({route}) => {
          
         }
       ])
+    }
+
+    const removeHandler = async() => {
+      try{
+        await firebase_db.ref('userInfo/' + dataId).remove()
+      }catch{
+        console.log('데이터 삭제 에러')
+      }
     }
 
 

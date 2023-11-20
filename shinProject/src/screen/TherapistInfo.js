@@ -20,21 +20,19 @@ const TherapistInfo = () => {
     useEffect(()=>{
             firebase_db.ref('userInfo').on('value', (snapshot) => {
                 let data = snapshot.val();
-                let dataId = Object.keys(data)
                 setFetchData(data);
                 setIsSelect(data);
-
             })
     }, [])
- 
-    useEffect(()=> {
-        setIsSelect(fetchData)
-    }, [fetchData])
 
 
+    // useEffect(()=> {
+    //     setIsSelect(fetchData)
+    // }, [fetchData])
 
-    const searchName = (e) => {
-        const filteredData = Object.entries(fetchData).filter(([key, value]) => value.Name.includes(e.toLowerCase()));
+
+    const searchName = (inputName) => {
+        const filteredData = Object.entries(fetchData).filter(([key, value]) => value.Name.includes(inputName.toLowerCase()));
       
         const filteredDataObject = Object.fromEntries(filteredData);
         setIsSelect(filteredDataObject);
@@ -134,6 +132,7 @@ const TherapistInfo = () => {
             )
         })
       }
+
       </ScrollView>
     </View>
   )

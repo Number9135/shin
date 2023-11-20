@@ -56,6 +56,7 @@ const WriteScreen = () => {
                 Name: name,
                 Sex: isSex,
                 JoinDate: `${isYear} - ${isMonth} - ${isDay}`,
+                CheckDate: `${isYear} - ${isMonth} - ${isDay}`,
                 Major: isMajor,
                 Floor: isFloor,
                 UpperSize: upperSize,

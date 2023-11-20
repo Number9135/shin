@@ -40,16 +40,16 @@ const SignUpScreen = () => {
      
        const createDate = 
         isDate.yaer + '-' +isDate.month + '-' + isDate.day + '-' + isDate.hour + '-' + isDate.minute + '-' + isDate.second
-
-    const emailDuplicationButton = async(e) => {
+       console.log('isDate :', typeof(createDate))
+    const emailDuplicationButton = async(inputEmail) => {
         const emailRegex = new RegExp('^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z-.]+$')
         try{
             await firebase_db.ref('users').orderByChild('profile/UserEmail')
-            .equalTo(e)
+            .equalTo(inputEmail)
             .once('value')
             .then((snapshot)=>{
                 console.log(snapshot)
-                if(e.match(emailRegex)){
+                if(inputEmail.match(emailRegex)){
                     if(snapshot.exists()){
                         setIsDuplication('이메일 중복')
                         console.log('중복')
