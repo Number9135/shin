@@ -39,8 +39,18 @@
           ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "19ce28c2-9847-4750-832f-515dc5623938"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/19ce28c2-9847-4750-832f-515dc5623938"
+    }
   },
   "name": "shinproject"
-  
 }

@@ -14,8 +14,12 @@ const LoginScreen = () => {
     const loginHandler = async() => {
       await  auth.signInWithEmailAndPassword(email, password)
         .then((userCredential)=>{const user = userCredential.user})
-        .then((res)=>console.log(res))
+        .then(()=>console.log("data : ", email, password))
         .then(()=>navigation.navigate("메인페이지"))
+      }
+
+      const signOut = () => {
+        auth.signOut()
       }
 
   return (
@@ -64,6 +68,12 @@ const LoginScreen = () => {
             }}
           >
             <Text style={[styles.textFont, { color: "blue" }]}>가입하기</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={signOut}
+          >
+            <Text style={[styles.textFont, { color: "blue" }]}>로그아웃</Text>
           </TouchableOpacity>
         </View>
       </View>

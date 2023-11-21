@@ -69,16 +69,16 @@ const SignUpScreen = () => {
         }
     }
 
-    const NicknameDuplicationButton = async(n) => {
+    const NicknameDuplicationButton = async(inputNick) => {
         const nicknameRegex = new RegExp('^[가-힣a-zA-Z0-9]+$')
         try{
             await firebase_db.ref('users')
                 .orderByChild('profile/UserName')
-                .equalTo(n)
+                .equalTo(inputNick)
                 .once('value')
                 .then((snapshot)=>{
                     let data = snapshot.val()
-                    if(n.match(nicknameRegex)){
+                    if(inputNick.match(nicknameRegex)){
                         if(data.exists()){
                             setIsDuplication('닉네임 중복');
                             console.log('중복');
@@ -187,7 +187,7 @@ const SignUpScreen = () => {
                 onFocus={()=>setIsFocus('닉네임')}
                 onBlur={()=>setIsFocus(null)}
                 onChangeText={setNickname}
-                editable={eiditableNick}
+                //editable={eiditableNick}
             />
             <TouchableOpacity onPress={()=>NicknameDuplicationButton(nickname)}
             style={styles.duplicationButton}>
@@ -220,7 +220,7 @@ const SignUpScreen = () => {
                 onFocus={()=>setIsFocus('비번')}
                 onBlur={()=>setIsFocus(null)}
                 onChangeText={setPassword}
-                editable={editablePw}
+                //editable={editablePw}
             />
         
         </View>
@@ -246,7 +246,7 @@ const SignUpScreen = () => {
                 onFocus={()=>setIsFocus('2차비번')}
                 onBlur={()=>setIsFocus(null)}
                 onChangeText={setComparePw}
-                editable={editableComparePw}
+                //editable={editableComparePw}
             />
         </View>
         {
