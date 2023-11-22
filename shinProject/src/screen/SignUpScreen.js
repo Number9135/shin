@@ -127,7 +127,7 @@ const SignUpScreen = () => {
                             displayName : nickname,
                         })
                     }).then(()=>{
-                        firebase_db.ref('users/' + auth.currentUser.uid + '/profile').set({
+                        firebase_db.ref('users/' + auth.currentUser.uid + '/profile').update({
                             UserName : nickname,
                             UserEmail : email,
                             Password : password,
