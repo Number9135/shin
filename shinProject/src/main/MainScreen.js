@@ -10,6 +10,9 @@ import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import InfoCard from '../forms/InfoCard';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp,} from "react-native-responsive-screen";
+import MenuCard from '../forms/MenuCard';
+
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -26,8 +29,8 @@ const MainScreen = () => {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-
   let isNotificationScheduled = false;
+  const [ isData, setIsData ] = useState(false);
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
@@ -62,9 +65,10 @@ const MainScreen = () => {
             firebase_db.ref('oneYearUser').child(key).update(data[key]);
             schedulePushNotification();
             isNotificationScheduled = true;
-    
+            setIsData(true)
           } else {
             console.log('아직 대상자가 없습니다.');
+            setIsData(false)
           }
         });
       });
@@ -105,7 +109,18 @@ const MainScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Image style={styles.imgStyle} resizeMode='cover' source={require('../../assets/headerImg.jpg')}/>
       <InfoCard/>
+     <View style={[styles.existContainer, isData ? {backgroundColor:"cornsilk"}:{backgroundColor:"darkgray"}]}>
+        {
+          isData ? (
+            <Text style={styles.fontText}>현재 신청예정자가 있습니다.</Text>
+          ) : (
+            <Text style={styles.fontText}>현재 신청예정자가 없습니다.</Text>
+          )
+        }
+     </View>
+     <MenuCard/>
     </View>
   )
 }
@@ -157,6 +172,27 @@ export default MainScreen
 
 const styles = StyleSheet.create({
   container : {
-    borderWidth : 1,
+    alignItems : 'center'
+  },
+
+  existContainer : {
+    height : hp('8%'),
+    width : wp('95%'),
+    marginVertical : 20,
+    borderRadius : 5, 
+    elevation : 3,
+    justifyContent : 'center',
+    alignItems  : 'center'
+  },
+
+  fontText : {
+    fontSize : wp('4%')
+  },
+
+  imgStyle : {
+    height : hp('25%'),
+    width : wp('100%'),
+    borderBottomRightRadius : 30,
+    borderBottomLeftRadius : 30,
   }
 })

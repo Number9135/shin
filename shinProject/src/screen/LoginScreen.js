@@ -45,6 +45,7 @@ const LoginScreen = () => {
           ]}
           placeholder="비밀번호를 입력하세요"
           fontSize={wp("3.5%")}
+          secureTextEntry={true}
           value={password}
           onChangeText={setPassword}
           onFocus={() => setIsFocus("비밀번호")}

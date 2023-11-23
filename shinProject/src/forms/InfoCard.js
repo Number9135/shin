@@ -33,30 +33,29 @@ export default function InfoCard () {
 
 const styles = StyleSheet.create({
     container : {
-        borderWidth : 1,
-        height  : hp('25%'),
+        height  : hp('12%'),
         width : wp('95%'),
         alignSelf : 'center',
         borderRadius : 5,
         elevation : 3,
-        backgroundColor : "black",
         opacity : 0.7,
         justifyContent : 'center',
-        alignItems : 'center'
+        alignItems : 'center',
+        marginTop : 20,
+        backgroundColor : 'white'
     },
 
     displayNameText : {
-        color : 'white',
-        fontSize : wp('6')
+        color : 'black',
+        fontSize : wp('5%')
     },
 
     textContainer : {
         justifyContent : 'center',
-        alignItems : 'center',
         borderWidth : 1,
         borderColor : 'white',
-        height : hp('20%'),
-        width : wp('80%')
+        height : hp('9%'),
+        width : wp('90%')
     }
 
 })

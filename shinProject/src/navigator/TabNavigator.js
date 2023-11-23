@@ -45,8 +45,9 @@ function TabNavigator() {
             <Feather name="home" size={wp('4.5%')} color={focused ? "black" : "gray"}/>
           ),
         }} />
-
-<Tab.Screen
+        {
+          loginState === true && (
+            <Tab.Screen
                 name="추가하기"
                 component={WriteScreen}
                 options={{
@@ -80,6 +81,10 @@ function TabNavigator() {
                     ),
                 }}
             />
+          )
+        }
+
+
 
 {
           loginState ? (
